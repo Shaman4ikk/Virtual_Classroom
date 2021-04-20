@@ -1,0 +1,21 @@
+.change_hand{
+    text-align: left;
+    width: 50%;
+    padding: 10px;
+    border-bottom: 1px solid black;
+}
+
+.LogOut{
+    text-align: right;
+    width: 50%;
+    padding: 10px;
+    border-bottom: 1px solid black;
+    left: 100%;
+}
+
+.main{
+    width: 35% !important;
+    position: relative !important;
+    margin-left: 30%!important;
+    margin-top: 30% !important;
+}
