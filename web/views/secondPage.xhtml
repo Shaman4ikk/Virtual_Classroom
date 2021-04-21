@@ -61,10 +61,15 @@
                         <h:outputText scope="row" value="#{arr.name}"/>
                     </h:column>
                     <h:column>
+                        <h:outputText scope="row" value="#{arr.handUp}"/>
                         <h:outputLabel rendered="#{arr.handUp eq true}" >
                             <span>&#129306;</span>
                         </h:outputLabel>
+                        <h:outputLabel rendered="#{arr.handUp eq false}" >
+                            <span> </span>
+                        </h:outputLabel>
                     </h:column>
+                    <br/>
                 </h:dataTable>
                 </table>
             </h:form>

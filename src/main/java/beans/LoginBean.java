@@ -1,9 +1,8 @@
 package beans;
 
 import entity.User;
-import reprository.UsersList;
+import reprository.UserRepository;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
@@ -28,7 +27,7 @@ public class LoginBean {
     }
 
     public String logOut(){
-        UsersList.logOut();
+        UserRepository.logOut();
         return "mainPage";
     }
 }

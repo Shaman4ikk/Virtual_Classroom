@@ -1,7 +1,7 @@
 package beans;
 
 import entity.User;
-import reprository.UsersList;
+import reprository.UserRepository;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -14,17 +14,17 @@ public class UsersBean {
     public boolean handUp;
 
     public static void addToList(User name) {
-        UsersList.addToListUser(name);
+        UserRepository.addToListUser(name);
     }
 
     public static void setHand(){
         FacesContext context = FacesContext.getCurrentInstance();
         User user = new User(context.getExternalContext().getSessionMap().get("name").toString());
-        UsersList.invertBool(user);
+        UserRepository.invertBool(user);
     }
 
     public ArrayList<User> getUsersList(){
-        return UsersList.getUsersList();
+        return UserRepository.getUsersList();
     }
     public String getName() {
         return name;
