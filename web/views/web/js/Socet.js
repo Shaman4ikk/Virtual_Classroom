@@ -1,7 +1,7 @@
 const webSocket = new WebSocket("ws://localhost:8080/Virtual_Classroom_war_exploded/users");
 
 
-$(document).ready(connect());
+document.ready(connect());
 
 
 
@@ -16,12 +16,17 @@ function logout() {
     webSocket.send(json)
 }
 
-function sendHand(text, handUp){
+function check(){
+    alert("Test")
+}
+
+
+function sendHand(text){
+    alert("test");
     let json = JSON.stringify({
         "name": text,
-        "handUp": handUp
     })
-    console.log(json);
+    alert(json);
     webSocket.send(json)
 }
 

@@ -14,6 +14,7 @@
           <element id="library" level="project" name="Maven: org.glassfish:javax.faces:2.2.10" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.6" />
           <element id="library" level="project" name="Maven: org.eclipse.jetty.toolchain:jetty-javax-websocket-api:1.1.2" />
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
         </element>
       </element>
     </root>

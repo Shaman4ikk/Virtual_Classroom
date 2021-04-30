@@ -11,7 +11,6 @@ import java.util.ArrayList;
 public class UsersBean {
 
     public String name;
-    public boolean handUp;
 
     public static void addToList(User name) {
         UserRepository.addToListUser(name);
@@ -27,6 +26,8 @@ public class UsersBean {
         return UserRepository.getUsersList();
     }
     public String getName() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        name = context.getExternalContext().getSessionMap().get("name").toString();
         return name;
     }
 

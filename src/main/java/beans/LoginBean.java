@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
 @ManagedBean(name = "loginBean")
+//Страница логина
 public class LoginBean {
     private String name;
 
@@ -18,6 +19,7 @@ public class LoginBean {
         this.name = name;
     }
 
+    //установка сессии
     public String setSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().put("name", name);
@@ -26,6 +28,11 @@ public class LoginBean {
         return "/views/secondPage.xhtml";
     }
 
+    public String getName(){
+        return name;
+    }
+
+    //Выход из классрума
     public String logOut(){
         UserRepository.logOut();
         return "mainPage";

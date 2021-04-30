@@ -5,6 +5,11 @@
     border-bottom: 1px solid black;
 }
 
+.name{
+    margin-right: 10px !important;
+    display: inline !important;
+}
+
 .LogOut{
     text-align: right;
     width: 50%;

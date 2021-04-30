@@ -15,14 +15,13 @@
 
     <h:body>
         <div class="main">
-            <!-- Без формы компоненты работать не будут -->
             <h:form method="post">
                 <p:panel header="Войти в Virtual Classroom">
                     <div class="row">
                         <div class="col">
                             <p:outputLabel for="inputTextId" value="Введите ваш ник: "/>
-                            <p:inputText id="inputTextId"
-                                         value="#{loginBean.inputText}">
+                            <p:inputText id="inputTextId" type="text"
+                                         value="#{loginBean.inputText}"  pattern="^[0-9a-zA-Z]+$"  maxlength="15" required="required">
                             </p:inputText>
                         </div>
                         <div class="col">
