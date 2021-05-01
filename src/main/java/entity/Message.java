@@ -1,9 +1,13 @@
 package entity;
 
+import java.util.List;
+
 public class Message {
 
     private String name;
     private boolean handStatus;
+    private String action;
+    private List<User> userSet;
 
     public String getName() {
         return name;
@@ -22,4 +26,19 @@ public class Message {
     }
 
 
+    public List<User> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(List<User> userSet) {
+        this.userSet = userSet;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 }
