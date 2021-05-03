@@ -28,13 +28,16 @@ public class User {
         return name;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", handUp=" + handUp +
+                '}';
     }
 
     @Override

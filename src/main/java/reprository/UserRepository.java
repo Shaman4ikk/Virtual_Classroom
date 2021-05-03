@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserRepository {
 
@@ -14,7 +15,7 @@ public class UserRepository {
 
     public static List<User> arr;
 
-    //Реализация паттерна Singleton для
+    //Реализация паттерна Singleton для списка
     public static List<User> getUsersList() {
         if (arr == null) {
             arr = new ArrayList<>();
@@ -36,22 +37,22 @@ public class UserRepository {
         } catch (Exception e) {
             logger.debug("Exeption: " + e);
         }
+    }
 
+    public static void checkNull() {
+        arr.removeIf(u -> u.name == null);
     }
 
     //Выход из классрума
-    public static void logOut() {
+    public static void logOut(String name) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            User user = new User(context.getExternalContext().getSessionMap().get("name").toString(), false);
-            int index = 0;
             for (User u : arr) {
-                if (u.name.equals(user.name)) {
-                    index = arr.indexOf(u);
+                if (u.name.equals(name)) {
+                    arr.remove(u);
                     break;
                 }
             }
-            arr.remove(index);
             context.getExternalContext().invalidateSession();
         } catch (Exception e) {
             logger.debug("Failed logOut: " + e);
@@ -73,7 +74,7 @@ public class UserRepository {
             user1.setHandUp(!user1.handUp);
             arr.set(index, user1);
         } catch (Exception e) {
-            logger.debug( "Failed handUp/handDown: " + e);
+            logger.debug("Failed handUp/handDown: " + e);
         }
 
     }

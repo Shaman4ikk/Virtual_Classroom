@@ -1,33 +1,31 @@
 let users = [];
 let webSocket = new WebSocket("ws://" + window.location.host + window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/users");
+let url = "ws://" + window.location.host + window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/users";
 let handUp = false;
-if (window.sessionStorage.getItem("hand") === "true") {
-    handUp = true;
-}
 
-let name = window.sessionStorage.getItem("name");
+let name;
+let loginForm = document.getElementsByClassName('loginForm')[0];
+loginForm.onsubmit = (e) => initName(e);
 
 function logout() {
+    alert(sessionStorage.getItem("name"));
     let json = JSON.stringify({
-        "user": name,
+        "name": sessionStorage.getItem("name"),
         "action": "logout"
     });
     console.log(json);
-    webSocket.send(json)
+    webSocket.send(json);
 }
 
-function connect() {
-
-    webSocket.onopen = function () {
-        let json = JSON.stringify({
-            "user": name,
-            "action": "login"
-        });
-        webSocket.send(json)
-    };
+function initName(e) {
+    name = document.getElementsByClassName('InputName')[0].value;
+    let json = JSON.stringify({
+        "name": name,
+        "action": "login"
+    });
+    webSocket.send(json);
+    sessionStorage.setItem("name", name);
 }
-
-connect();
 
 function sendHand() {
     if (window.sessionStorage.getItem("hand") === "true") {
@@ -37,7 +35,7 @@ function sendHand() {
         handUp = false;
     }
     let json = JSON.stringify({
-        "name": name,
+        "name": sessionStorage.getItem("name"),
         "handUp": handUp,
         "action": "hand"
     })
@@ -45,16 +43,9 @@ function sendHand() {
     webSocket.send(json)
 }
 
-function init(name) {
-    console.log(name);
-    window.sessionStorage.setItem("name", name);
-    window.sessionStorage.setItem("hand", "false");
-}
-
 function messageHandler(event) {
     let message = JSON.parse(event.data);
     users = message.users;
-    alert(users);
     if (users) {
         document.getElementById("table").value = users;
     }

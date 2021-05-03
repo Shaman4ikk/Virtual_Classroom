@@ -23,6 +23,7 @@ public class UsersBean {
     }
 
     public List<User> getUsersList() {
+        System.out.println(UserRepository.getUsersList());
         return UserRepository.getUsersList();
     }
 
