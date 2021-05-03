@@ -23,7 +23,7 @@
                     <h:commandButton onclick="window.sessionStorage.setItem('hand', 'true'); sendHand();" value="Hand Up/Hand Down"> </h:commandButton>
                 </div>
                 <div class="LogOut">
-                    <div class="name"><h:outputText padding-right = "10px"/></div>
+                    <div class="name"><h:outputText value="#{loginBean.inputText}" padding-right = "10px" /></div>
                     <h:commandButton onclick="logout()" action="mainPage" value="LogOut"> </h:commandButton>
                 </div>
             </div>

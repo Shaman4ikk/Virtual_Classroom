@@ -45,13 +45,10 @@ function sendHand() {
 
 function messageHandler(event) {
     let message = JSON.parse(event.data);
-    alert(message.name);
     users = message.users;
     if (users) {
         document.getElementById("table").value = users;
     }
-    alert(users);
-
 }
 
 webSocket.onmessage = function (event) {
