@@ -32,6 +32,7 @@ public class Server {
 
     @OnMessage
     public void onMessage(Message message) {
+        System.out.println(message.getAction());
         switch (message.getAction()) {
             //Проверка руки
             case "hand": {
@@ -44,11 +45,13 @@ public class Server {
                     }
                 }
                 message.setUserSet(UserRepository.getUsersList());
+                System.out.println(UserRepository.getUsersList());
                 break;
             }
             //Логин
             case "login": {
                 UserRepository.addToListUser(new User(message.getName(), message.isHandStatus()));
+                System.out.println(UserRepository.getUsersList());
                 message.setUserSet(UserRepository.getUsersList());
                 break;
             }

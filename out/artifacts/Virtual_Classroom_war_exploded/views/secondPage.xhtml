@@ -20,37 +20,19 @@
         <h:form method="post">
             <div class="nav">
                 <div class="change_hand">
-                    <h:commandButton onclick="window.sessionStorage.setItem('hand', 'true'); sendHand();" value="Hand Up/Hand Down"> </h:commandButton>
+                    <h:commandButton onclick="sendHand()" value="Hand Up/Hand Down"> </h:commandButton>
                 </div>
                 <div class="LogOut">
-                    <div class="name"><h:outputText value="#{usersBean.getName()}" padding-right = "10px" /></div>
+                    <h:outputText class="name" padding-right = "10px" />
+
                     <h:commandButton onclick="logout()" action="mainPage" value="LogOut"> </h:commandButton>
                 </div>
             </div>
         </h:form>
         <!--Список пользователей-->
         <h2 align="center"><h:outputText value="Список пользователей"> </h:outputText></h2>
-        <div align="center">
-            <h:form method="post">
-                <table class="table table-sm">
-                    <f:ajax render="table" event="mousemove" execute="@form"/>
-                    <h:dataTable id="table" for="#{usersBean.getUsersList()}" value="#{usersBean.getUsersList()}" var="arr">
-                        <h:column>
-                            <f:facet scope="col" name="header">Name</f:facet>
-                            <h:outputText scope="row" value="#{arr.name}"/>
-                        </h:column>
-                        <h:column>
-                            <h:outputLabel rendered="#{arr.handUp eq true}" >
-                                <span>&#129306;</span>
-                            </h:outputLabel>
-                            <h:outputLabel rendered="#{arr.handUp eq false}" >
-                                <span> </span>
-                            </h:outputLabel>
-                        </h:column>
-                        <br/>
-                    </h:dataTable>
-                </table>
-            </h:form>
+        <div align="center" class="main">
+            <div class="table__wrapper"></div>
         </div>
         <script src="../views/web/js/Socet.js" type="text/javascript"></script>
         <script src="../views/web/js/User.js" type="text/javascript"></script>

@@ -5,10 +5,14 @@ let handUp = false;
 
 let name;
 let loginForm = document.getElementsByClassName('loginForm')[0];
-loginForm.onsubmit = (e) => initName(e);
+
+if (loginForm) {
+    loginForm.onsubmit = (e) => initName(e);
+}
+
+
 
 function logout() {
-    alert(sessionStorage.getItem("name"));
     let json = JSON.stringify({
         "name": sessionStorage.getItem("name"),
         "action": "logout"
@@ -28,6 +32,7 @@ function initName(e) {
 }
 
 function sendHand() {
+    event.preventDefault();
     if (window.sessionStorage.getItem("hand") === "true") {
         handUp = true;
     }
@@ -39,16 +44,57 @@ function sendHand() {
         "handUp": handUp,
         "action": "hand"
     })
-    console.log(json);
-    webSocket.send(json)
+    webSocket.send(json);
 }
 
 function messageHandler(event) {
     let message = JSON.parse(event.data);
-    users = message.users;
-    if (users) {
-        document.getElementById("table").value = users;
+    renderTable(message.userSet);
+}
+
+function renderTable(userSet){
+    let tableNode = document.createElement('table');
+    tableNode.className = 'table__users';
+    let int = 0;
+
+    // creating labels
+    let labelRowNode = document.createElement('tr');
+    for(const label in userSet[0]){
+        let labelNode = document.createElement('th');
+        if (int === 0){
+            labelNode.textContent = "Name";
+        } else if(int === 1){
+            labelNode.textContent = " ";
+        }
+        int++;
+        labelRowNode.appendChild(labelNode);
     }
+    tableNode.appendChild(labelRowNode);
+
+    // inserting content
+    userSet.forEach((entry) => {
+       let entryRowNode = document.createElement('tr');
+       for(const label in entry) {
+           let entryNode = document.createElement('td');
+           let content = entry[label];
+
+           if(typeof entry[label] === "boolean"){
+               content = entry[label] ? '🤚' : '';
+           }
+
+           entryNode.textContent = content;
+           entryRowNode.appendChild(entryNode);
+       }
+       tableNode.appendChild(entryRowNode);
+    });
+
+    let tableWrapper = document.getElementsByClassName('table__wrapper')[0];
+    while (tableWrapper.firstChild) {
+        tableWrapper.removeChild(tableWrapper.lastChild);
+    }
+    tableWrapper.appendChild(tableNode);
+
+
 }
 
 webSocket.onmessage = function (event) {
