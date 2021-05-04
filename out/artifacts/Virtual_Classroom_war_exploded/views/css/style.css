@@ -19,8 +19,8 @@
 }
 
 .main{
+    margin-top: 3% !important;
     width: 35% !important;
     position: relative !important;
-    margin-left: 30%!important;
-    margin-top: 30% !important;
+    margin-left: 30% !important;
 }
