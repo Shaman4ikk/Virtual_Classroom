@@ -1,6 +1,7 @@
 package beans;
 
-import entity.User;
+import classes.User;
+import entity.UserDTO;
 import reprository.UserRepository;
 
 import javax.faces.bean.ManagedBean;
@@ -12,17 +13,17 @@ public class UsersBean {
 
     public String name;
 
-    public static void addToList(User name) {
+    public static void addToList(UserDTO name) {
         UserRepository.addToListUser(name);
     }
 
     public static void setHand() {
         FacesContext context = FacesContext.getCurrentInstance();
-        User user = new User(context.getExternalContext().getSessionMap().get("name").toString());
+        UserDTO user = new UserDTO(context.getExternalContext().getSessionMap().get("name").toString());
         UserRepository.invertBool(user);
     }
 
-    public List<User> getUsersList() {
+    public List<UserDTO> getUsersList() {
         System.out.println(UserRepository.getUsersList());
         return UserRepository.getUsersList();
     }

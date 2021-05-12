@@ -1,6 +1,4 @@
-let users = [];
 let webSocket = new WebSocket("ws://" + window.location.host + window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/users");
-let url = "ws://" + window.location.host + window.location.pathname.substring(0, window.location.pathname.indexOf("/", 2)) + "/users";
 let handUp = false;
 
 let name;
@@ -11,6 +9,26 @@ if (loginForm) {
 }
 
 
+function openAction(evt, action) {
+    // Declare all variables
+    let i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(action).style.display = "block";
+    evt.currentTarget.className += " active";
+}
 
 function logout() {
     let json = JSON.stringify({
@@ -24,7 +42,6 @@ function logout() {
 function initName(e) {
     name = document.getElementsByClassName('InputName')[0].value;
     let json = JSON.stringify({
-        "name": name,
         "action": "login"
     });
     webSocket.send(json);
@@ -51,14 +68,6 @@ function messageHandler(event) {
     let message = JSON.parse(event.data);
     renderTable(message.userSet);
 }
-
-function getName(){
-    let z = document.getElementsByClassName("name");
-    z.textContent = name;
-    alert(z);
-}
-
-getName();
 
 function renderTable(userSet){
     let tableNode = document.createElement('table');

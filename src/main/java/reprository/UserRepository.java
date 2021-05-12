@@ -1,54 +1,102 @@
 package reprository;
 
-import entity.User;
+import classes.User;
+import entity.UserDTO;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
+import server.Server;
+import util.HibernateUtil;
 
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class UserRepository {
 
     private static final Logger logger = LogManager.getLogger(UserRepository.class);
 
-    public static List<User> arr;
+    public static List<UserDTO> arr;
 
     //Реализация паттерна Singleton для списка
-    public static List<User> getUsersList() {
+    public static List<UserDTO> getUsersList() {
         if (arr == null) {
             arr = new ArrayList<>();
         }
         return arr;
     }
 
-    public static void setUsersList(List<User> arr) {
+    public static void setUsersList(List<UserDTO> arr) {
         UserRepository.arr = arr;
     }
 
+    public static boolean checkUser(Object name){
+        boolean result = false;
+        for (UserDTO u : arr) {
+            if (u.getName().equals(name)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public static boolean login(String login, String password){
+        System.out.println(login + " " + password);
+        Session session = HibernateUtil.getSession().openSession();
+        session.beginTransaction();
+        System.out.println("Test");
+        User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).add(Restrictions.eq("password", password)).uniqueResult();
+        System.out.println(user.toString());
+        session.getTransaction().commit();
+        if(user.getName() != null && user.getPassword() != null){
+            UserDTO userDTO = new UserDTO(user.login, user.handUp);
+            addToListUser(userDTO);
+            return true;
+        } else return false;
+    }
+
+    public static boolean register(String login, String password){
+        Session session = HibernateUtil.getSession().openSession();
+        session.beginTransaction();
+        User user = new User();
+        user.setName(login);
+        user.setPassword(password);
+        user.setHandUp(false);
+        System.out.println(user.toString());
+        session.save(user);
+        session.getTransaction().commit();
+        if(user.getName() != null && user.getPassword() != null){
+            UserDTO userDTO = new UserDTO(user.login, user.handUp);
+            addToListUser(userDTO);
+            return true;
+        } else return false;
+    }
+
     //Добавление пользователей в список
-    public static void addToListUser(User name) {
+    public static void addToListUser(UserDTO user) {
         try {
             arr = getUsersList();
-            if (!arr.contains(name)) {
-                arr.add(name);
+            if (!arr.contains(user)) {
+                arr.add(user);
             }
+            System.out.println(arr.toString());
         } catch (Exception e) {
             logger.debug("Exeption: " + e);
         }
     }
 
     public static void checkNull() {
-        arr.removeIf(u -> u.name == null);
+        arr.removeIf(u -> u.getName() == null);
     }
 
     //Выход из классрума
     public static void logOut(String name) {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
-            for (User u : arr) {
-                if (u.name.equals(name)) {
+            for (UserDTO u : arr) {
+                if (u.getName().equals(name)) {
                     arr.remove(u);
                     break;
                 }
@@ -60,18 +108,18 @@ public class UserRepository {
     }
 
     //Поднятие и опускание руки
-    public static void invertBool(User user) {
+    public static void invertBool(UserDTO user) {
         try {
-            User user1;
+            UserDTO user1;
             int index = 0;
-            for (User u : arr) {
-                if (u.name.equals(user.name)) {
+            for (UserDTO u : arr) {
+                if (u.getName().equals(user.getName())) {
                     index = arr.indexOf(u);
                     break;
                 }
             }
             user1 = arr.get(index);
-            user1.setHandUp(!user1.handUp);
+            user1.setHandUp(!user1.isHandUp());
             arr.set(index, user1);
         } catch (Exception e) {
             logger.debug("Failed handUp/handDown: " + e);

@@ -1,7 +1,8 @@
 package server;
 
-import entity.Message;
-import entity.User;
+import classes.Message;
+import classes.User;
+import entity.UserDTO;
 import reprository.UserRepository;
 import server.decoder.MessageDecoder;
 import server.encoder.MessageEncoder;
@@ -31,33 +32,30 @@ public class Server {
     }
 
     @OnMessage
-    public void onMessage(Message message) {
-        System.out.println(message.getAction());
+    public void onMessage(Message message) throws InterruptedException {
         switch (message.getAction()) {
             //Проверка руки
             case "hand": {
                 UserRepository.checkNull();
-                List<User> list = UserRepository.getUsersList();
-                for (User user : list) {
+                List<UserDTO> list = UserRepository.getUsersList();
+                for (UserDTO user : list) {
                     if (user.getName().equals(message.getName())) {
                         UserRepository.invertBool(user);
                         break;
                     }
                 }
                 message.setUserSet(UserRepository.getUsersList());
-                System.out.println(UserRepository.getUsersList());
                 break;
             }
             //Логин
             case "login": {
-                UserRepository.addToListUser(new User(message.getName(), message.isHandStatus()));
-                System.out.println(UserRepository.getUsersList());
+                //UserRepository.addToListUser(new UserDTO(message.getName(), message.isHandStatus()));
                 message.setUserSet(UserRepository.getUsersList());
                 break;
             }
             //Выход из классрума
             case "logout": {
-                List<User> list = UserRepository.getUsersList().stream().filter(user -> !user.getName().equals(message.getName())).collect(Collectors.toList());
+                List<UserDTO> list = UserRepository.getUsersList().stream().filter(user -> !user.getName().equals(message.getName())).collect(Collectors.toList());
                 UserRepository.logOut(message.getName());
                 message.setUserSet(list);
                 break;
@@ -65,9 +63,11 @@ public class Server {
             default:
                 break;
         }
+        System.out.println("sendmessage");
         //Отправка данных клиенту
         sessions.forEach(s -> {
             try {
+                System.out.println("sendmessage");
                 s.getBasicRemote().sendObject(message);
             } catch (IOException | EncodeException e) {
                 e.printStackTrace();
