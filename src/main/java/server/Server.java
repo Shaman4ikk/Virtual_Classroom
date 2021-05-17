@@ -63,11 +63,9 @@ public class Server {
             default:
                 break;
         }
-        System.out.println("sendmessage");
         //Отправка данных клиенту
         sessions.forEach(s -> {
             try {
-                System.out.println("sendmessage");
                 s.getBasicRemote().sendObject(message);
             } catch (IOException | EncodeException e) {
                 e.printStackTrace();

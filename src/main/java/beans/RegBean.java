@@ -4,26 +4,25 @@ import reprository.UserRepository;
 
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "loginBean")
-public class LoginBean {
+@ManagedBean(name = "regBean")
+public class RegBean {
     private String login;
     private String password;
 
-    public static String nextPage() {
-        return "nextPage";
+    public String register(){
+        if(UserRepository.register(login, password)){
+            return nextPage();
+        }
+        return "mainPage";
     }
 
-    public String getLogin(){
+    public String getLogin() {
         return login;
     }
 
-    public String login(){
-        if(UserRepository.login(login, password)){
-             return nextPage();
-        }
-       return "mainPage";
+    public String toLoginPage(){
+        return "mainPage";
     }
-
     public void setLogin(String login) {
         this.login = login;
     }
@@ -36,9 +35,7 @@ public class LoginBean {
         this.password = password;
     }
 
-    public String toRegPage(){
-        return "regPage";
+    private String nextPage() {
+        return "nextPage";
     }
-
-    //Выход из классрума
 }

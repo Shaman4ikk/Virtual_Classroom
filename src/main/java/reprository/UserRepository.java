@@ -2,11 +2,12 @@ package reprository;
 
 import classes.User;
 import entity.UserDTO;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
-import server.Server;
 import util.HibernateUtil;
 
 import javax.faces.context.FacesContext;
@@ -15,7 +16,7 @@ import java.util.List;
 
 public class UserRepository {
 
-    private static final Logger logger = LogManager.getLogger(UserRepository.class);
+    static final Logger logger = LogManager.getLogger(UserRepository.class);
 
     public static List<UserDTO> arr;
 
@@ -31,7 +32,7 @@ public class UserRepository {
         UserRepository.arr = arr;
     }
 
-    public static boolean checkUser(Object name){
+    public static boolean checkUser(Object name) {
         boolean result = false;
         for (UserDTO u : arr) {
             if (u.getName().equals(name)) {
@@ -42,36 +43,45 @@ public class UserRepository {
         return result;
     }
 
-    public static boolean login(String login, String password){
-        System.out.println(login + " " + password);
-        Session session = HibernateUtil.getSession().openSession();
-        session.beginTransaction();
-        System.out.println("Test");
-        User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).add(Restrictions.eq("password", password)).uniqueResult();
-        System.out.println(user.toString());
-        session.getTransaction().commit();
-        if(user.getName() != null && user.getPassword() != null){
+    public static boolean login(String login, String password) {
+        try {
+            password = hashMD5(password);
+            Session session = HibernateUtil.getSession().openSession();
+            session.beginTransaction();
+            User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).add(Restrictions.eq("password", password)).uniqueResult();
+            session.getTransaction().commit();
             UserDTO userDTO = new UserDTO(user.login, user.handUp);
             addToListUser(userDTO);
             return true;
-        } else return false;
+        } catch (HibernateException | NullPointerException e) {
+            System.out.println("CheckCatch");
+            logger.debug("Exeption: " + e);
+        }
+        return false;
     }
 
-    public static boolean register(String login, String password){
-        Session session = HibernateUtil.getSession().openSession();
-        session.beginTransaction();
-        User user = new User();
-        user.setName(login);
-        user.setPassword(password);
-        user.setHandUp(false);
-        System.out.println(user.toString());
-        session.save(user);
-        session.getTransaction().commit();
-        if(user.getName() != null && user.getPassword() != null){
-            UserDTO userDTO = new UserDTO(user.login, user.handUp);
-            addToListUser(userDTO);
-            return true;
-        } else return false;
+    public static boolean register(String login, String password) {
+        try {
+            password = hashMD5(password);
+            System.out.println(password);
+            Session session = HibernateUtil.getSession().openSession();
+            session.beginTransaction();
+            User user = new User();
+            user.setName(login);
+            user.setPassword(password);
+            user.setHandUp(false);
+            session.save(user);
+            session.getTransaction().commit();
+            if (user.getName() != null && user.getPassword() != null) {
+                UserDTO userDTO = new UserDTO(user.login, user.handUp);
+                addToListUser(userDTO);
+                return true;
+            }
+        } catch (HibernateException | NullPointerException e) {
+            System.out.println("CheckCatch");
+            logger.debug("Exeption: " + e);
+        }
+        return false;
     }
 
     //Добавление пользователей в список
@@ -81,10 +91,13 @@ public class UserRepository {
             if (!arr.contains(user)) {
                 arr.add(user);
             }
-            System.out.println(arr.toString());
         } catch (Exception e) {
             logger.debug("Exeption: " + e);
         }
+    }
+
+    public static String hashMD5(String password) {
+        return DigestUtils.md5Hex(password);
     }
 
     public static void checkNull() {
@@ -107,6 +120,12 @@ public class UserRepository {
         }
     }
 
+    public static void connect() {
+        Session session = HibernateUtil.getSession().openSession();
+        session.beginTransaction();
+        session.getTransaction().commit();
+    }
+
     //Поднятие и опускание руки
     public static void invertBool(UserDTO user) {
         try {
@@ -124,6 +143,5 @@ public class UserRepository {
         } catch (Exception e) {
             logger.debug("Failed handUp/handDown: " + e);
         }
-
     }
 }

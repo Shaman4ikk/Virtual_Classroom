@@ -3,11 +3,15 @@ let handUp = false;
 
 let name;
 let loginForm = document.getElementsByClassName('loginForm')[0];
+let regForm = document.getElementsByClassName('regForm')[0];
 
 if (loginForm) {
     loginForm.onsubmit = (e) => initName(e);
 }
 
+if (regForm) {
+    regForm.onsubmit = (e) => initName(e);
+}
 
 function openAction(evt, action) {
     // Declare all variables
@@ -19,7 +23,7 @@ function openAction(evt, action) {
         tabcontent[i].style.display = "none";
     }
 
-        // Get all elements with class="tablinks" and remove the class "active"
+    // Get all elements with class="tablinks" and remove the class "active"
     tablinks = document.getElementsByClassName("tablinks");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
@@ -44,8 +48,17 @@ function initName(e) {
     let json = JSON.stringify({
         "action": "login"
     });
+    alert(json);
     webSocket.send(json);
     sessionStorage.setItem("name", name);
+}
+
+function getList() {
+    console.log("getList");
+    let json = JSON.stringify({
+        "action": "login"
+    });
+    webSocket.send(json);
 }
 
 function sendHand() {
@@ -69,18 +82,18 @@ function messageHandler(event) {
     renderTable(message.userSet);
 }
 
-function renderTable(userSet){
+function renderTable(userSet) {
     let tableNode = document.createElement('table');
     tableNode.className = 'table__users';
     let int = 0;
 
     // creating labels
     let labelRowNode = document.createElement('tr');
-    for(const label in userSet[0]){
+    for (const label in userSet[0]) {
         let labelNode = document.createElement('th');
-        if (int === 0){
+        if (int === 0) {
             labelNode.textContent = "Name";
-        } else if(int === 1){
+        } else if (int === 1) {
             labelNode.textContent = " ";
         }
         int++;
@@ -90,19 +103,19 @@ function renderTable(userSet){
 
     // inserting content
     userSet.forEach((entry) => {
-       let entryRowNode = document.createElement('tr');
-       for(const label in entry) {
-           let entryNode = document.createElement('td');
-           let content = entry[label];
+        let entryRowNode = document.createElement('tr');
+        for (const label in entry) {
+            let entryNode = document.createElement('td');
+            let content = entry[label];
 
-           if(typeof entry[label] === "boolean"){
-               content = entry[label] ? '🤚' : '';
-           }
+            if (typeof entry[label] === "boolean") {
+                content = entry[label] ? '🤚' : '';
+            }
 
-           entryNode.textContent = content;
-           entryRowNode.appendChild(entryNode);
-       }
-       tableNode.appendChild(entryRowNode);
+            entryNode.textContent = content;
+            entryRowNode.appendChild(entryNode);
+        }
+        tableNode.appendChild(entryRowNode);
     });
 
     let tableWrapper = document.getElementsByClassName('table__wrapper')[0];

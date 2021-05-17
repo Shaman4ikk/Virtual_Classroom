@@ -14,7 +14,6 @@ public class HibernateUtil {
             Configuration configuration = new Configuration();
             configuration.configure();
             ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-            System.out.println("check");
             return configuration.buildSessionFactory(serviceRegistry);
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);

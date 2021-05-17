@@ -13,47 +13,24 @@
     </h:head>
 
     <h:body>
-        <div class="tab">
-            <button  class="tablinks" onclick="openAction(event,'Reg')">Регистрация</button>
-            <button class="tablinks" onclick="openAction(event,'Login')">Войти</button>
-        </div>
-        <div></div>
-        <div id="Login" class="tabcontent" align="center" style="max-width: 20%; display: none;">
+        <h:form method="post" class="tab">
+            <h:commandButton value="Зарегистрироваться" class="inputLogin" action="#{loginBean.toRegPage()}">
+            </h:commandButton>
+        </h:form>
+        <div id="Login" class="tabcontent" align="center" style="max-width: 20%;">
             <h:form method="post" class="loginForm">
                 <p:panel header="Войти в Virtual Classroom">
                     <div class="row">
                         <div class="col">
                             <p:outputLabel value="Введите ваш ник: "/>
                             <p:inputText id="LoginName" type="text" class="InputName"
-                                         value="#{loginBean.login}" pattern="^[0-9a-zA-Z]+$" maxlength="15"
-                                         required="required">
+                                         value="#{loginBean.login}" pattern="^[0-9a-zA-Z]+$" maxlength="15" required="required">
                             </p:inputText>
                             <p:outputLabel value=" Введите пароль: "/>
                             <p:inputText id="LoginPassword" type="password" class="InputName"
-                                         value="#{loginBean.password}" pattern="^[0-9a-zA-Z]+$" maxlength="15"
-                                         required="required">
-                            </p:inputText>
-                            <h:commandButton value="Войти" class="inputLogin" action="#{loginBean.login()}">
-                            </h:commandButton>
-                        </div>
-                    </div>
-                </p:panel>
-            </h:form>
-        </div>
-        <div id="Reg" class="tabcontent" align="center" style="max-width: 20%;">
-            <h:form method="post" class="loginForm">
-                <p:panel header="Зарегистрироваться">
-                    <div class="row">
-                        <div class="col">
-                            <p:outputLabel value="Введите ваш ник:  "/>
-                            <p:inputText id="RegName" type="text" class="InputName"
-                                         value="#{loginBean.login}" pattern="^[0-9a-zA-Z]+$" maxlength="15" required="required">
-                            </p:inputText>
-                            <p:outputLabel value=" Введите пароль:  "/>
-                            <p:inputText id="RegPassword" type="password" class="InputName"
                                          value="#{loginBean.password}" pattern="^[0-9a-zA-Z]+$" maxlength="15" required="required">
                             </p:inputText>
-                            <h:commandButton value="Войти" class="inputLogin" action="#{loginBean.register()}">
+                            <h:commandButton value="Войти" class="inputLogin" action="#{loginBean.login()}">
                             </h:commandButton>
                         </div>
                     </div>
