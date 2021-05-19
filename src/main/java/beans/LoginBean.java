@@ -13,8 +13,8 @@ public class LoginBean {
         return "nextPage";
     }
 
-    public String getLogin(){
-        return login;
+    public String toRegPage(){
+        return "regPage";
     }
 
     public String login(){
@@ -36,9 +36,8 @@ public class LoginBean {
         this.password = password;
     }
 
-    public String toRegPage(){
-        return "regPage";
+    public String getLogin(){
+        return login;
     }
 
-    //Выход из классрума
 }

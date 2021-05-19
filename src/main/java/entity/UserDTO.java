@@ -61,7 +61,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "classes.User{" +
+        return "orm.User{" +
                 "name='" + login + '\'' +
                 ", handUp=" + handUp +
                 '}';

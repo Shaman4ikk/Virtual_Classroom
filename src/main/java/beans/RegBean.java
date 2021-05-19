@@ -9,6 +9,14 @@ public class RegBean {
     private String login;
     private String password;
 
+    public String toLoginPage(){
+        return "mainPage";
+    }
+
+    private String nextPage() {
+        return "nextPage";
+    }
+
     public String register(){
         if(UserRepository.register(login, password)){
             return nextPage();
@@ -20,9 +28,6 @@ public class RegBean {
         return login;
     }
 
-    public String toLoginPage(){
-        return "mainPage";
-    }
     public void setLogin(String login) {
         this.login = login;
     }
@@ -35,7 +40,4 @@ public class RegBean {
         this.password = password;
     }
 
-    private String nextPage() {
-        return "nextPage";
-    }
 }

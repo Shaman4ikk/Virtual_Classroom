@@ -1,6 +1,6 @@
 package reprository;
 
-import classes.User;
+import orm.User;
 import entity.UserDTO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.LogManager;
@@ -28,10 +28,6 @@ public class UserRepository {
         return arr;
     }
 
-    public static void setUsersList(List<UserDTO> arr) {
-        UserRepository.arr = arr;
-    }
-
     public static boolean checkUser(Object name) {
         boolean result = false;
         for (UserDTO u : arr) {
@@ -44,27 +40,26 @@ public class UserRepository {
     }
 
     public static boolean login(String login, String password) {
+        Session session = HibernateUtil.getSession().openSession();
         try {
             password = hashMD5(password);
-            Session session = HibernateUtil.getSession().openSession();
-            session.beginTransaction();
             User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).add(Restrictions.eq("password", password)).uniqueResult();
             session.getTransaction().commit();
             UserDTO userDTO = new UserDTO(user.login, user.handUp);
             addToListUser(userDTO);
             return true;
         } catch (HibernateException | NullPointerException e) {
-            System.out.println("CheckCatch");
             logger.debug("Exeption: " + e);
+        } finally {
+            session.close();
         }
         return false;
     }
 
     public static boolean register(String login, String password) {
+        Session session = HibernateUtil.getSession().openSession();
         try {
             password = hashMD5(password);
-            System.out.println(password);
-            Session session = HibernateUtil.getSession().openSession();
             session.beginTransaction();
             User user = new User();
             user.setName(login);
@@ -72,14 +67,16 @@ public class UserRepository {
             user.setHandUp(false);
             session.save(user);
             session.getTransaction().commit();
+            session.close();
             if (user.getName() != null && user.getPassword() != null) {
                 UserDTO userDTO = new UserDTO(user.login, user.handUp);
                 addToListUser(userDTO);
                 return true;
             }
         } catch (HibernateException | NullPointerException e) {
-            System.out.println("CheckCatch");
             logger.debug("Exeption: " + e);
+        } finally {
+            session.close();
         }
         return false;
     }
@@ -114,6 +111,7 @@ public class UserRepository {
                     break;
                 }
             }
+            HibernateUtil.shutdown();
             context.getExternalContext().invalidateSession();
         } catch (Exception e) {
             logger.debug("Failed logOut: " + e);

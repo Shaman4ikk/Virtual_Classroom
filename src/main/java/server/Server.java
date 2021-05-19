@@ -1,7 +1,6 @@
 package server;
 
-import classes.Message;
-import classes.User;
+import entity.Message;
 import entity.UserDTO;
 import reprository.UserRepository;
 import server.decoder.MessageDecoder;
@@ -49,7 +48,6 @@ public class Server {
             }
             //Логин
             case "login": {
-                //UserRepository.addToListUser(new UserDTO(message.getName(), message.isHandStatus()));
                 message.setUserSet(UserRepository.getUsersList());
                 break;
             }

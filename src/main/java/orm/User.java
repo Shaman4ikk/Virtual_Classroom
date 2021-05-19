@@ -1,4 +1,4 @@
-package classes;
+package orm;
 
 import javax.persistence.*;
 
