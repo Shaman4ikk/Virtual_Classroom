@@ -44,7 +44,6 @@ public class UserRepository {
         try {
             password = hashMD5(password);
             User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).add(Restrictions.eq("password", password)).uniqueResult();
-            session.getTransaction().commit();
             UserDTO userDTO = new UserDTO(user.login, user.handUp);
             addToListUser(userDTO);
             return true;
@@ -54,6 +53,35 @@ public class UserRepository {
             session.close();
         }
         return false;
+    }
+
+    public static UserDTO login(String login) {
+        Session session = HibernateUtil.getSession().openSession();
+        try {
+            User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", login)).uniqueResult();
+            UserDTO userDTO = new UserDTO(user.login, user.handUp);
+            addToListUser(userDTO);
+            return userDTO;
+        } catch (HibernateException | NullPointerException e) {
+            logger.debug("Exeption: " + e);
+        } finally {
+            session.close();
+        }
+        return null;
+    }
+
+    public static UserDTO checkUserDB(String name){
+        Session session = HibernateUtil.getSession().openSession();
+        try {
+            User user = (User) session.createCriteria(User.class).add(Restrictions.eq("login", name)).uniqueResult();
+            UserDTO userDTO = new UserDTO(user.login, user.handUp);
+            return userDTO;
+        } catch (HibernateException | NullPointerException e) {
+            logger.debug("Exeption: " + e);
+        } finally {
+            session.close();
+        }
+        return null;
     }
 
     public static boolean register(String login, String password) {
@@ -67,7 +95,6 @@ public class UserRepository {
             user.setHandUp(false);
             session.save(user);
             session.getTransaction().commit();
-            session.close();
             if (user.getName() != null && user.getPassword() != null) {
                 UserDTO userDTO = new UserDTO(user.login, user.handUp);
                 addToListUser(userDTO);

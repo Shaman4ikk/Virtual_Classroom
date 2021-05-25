@@ -135,7 +135,11 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>3.1.3.RELEASE</version>
+        </dependency>
         <!--Common Java Annotations.
         For this app it includes security annotation: @RolesAllowed; @DenyAll, @RunAs, @PermitAll
          -->

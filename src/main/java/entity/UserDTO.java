@@ -6,7 +6,7 @@ public class UserDTO {
     protected String login;
     protected boolean handUp;
 
-    protected UserDTO(){}
+    public UserDTO(){}
 
     protected UserDTO(String login, String password, boolean handUp) {
         this.login = login;
